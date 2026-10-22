@@ -17,13 +17,25 @@ car_collision = pygame.transform.scale(car_collision, (20,45))
 
 finish_line = pygame.image.load("finish_line_no_bg.png")
 finish_line = pygame.transform.scale(finish_line, (100, 50))
+finish_line_active = False
+
+start_screen = pygame.image.load("start_screen.png")
+start_screen_active = True
+track1_button = pygame.image.load("track_1_button.png")
+track1_button = pygame.transform.scale(track1_button, (100, 20))
+track2_button = pygame.image.load("track_2_button.png")
+track2_button = pygame.transform.scale(track2_button, (100, 20))
 
 track = pygame.image.load("track.png")
+track1_select = False
 track_collision = pygame.image.load("Better_collision_track.png").convert()
-grass_mask = pygame.mask.from_threshold(track_collision, (255, 255, 255), (10, 10, 10, 255) )
+track2 = pygame.image.load("track2.png")
+track2_select = False
+track2_collision = pygame.image.load("track2_collision.png").convert()
+grass_mask1 = pygame.mask.from_threshold(track_collision, (255, 255, 255), (10, 10, 10, 255) )
+grass_mask2 = pygame.mask.from_threshold(track2_collision, (255, 255, 255), (10, 10, 10, 255) )
 
-car_visable = True
-
+car_visable = False
 class car:
     def __init__(self):
     
@@ -86,23 +98,58 @@ lap_time = 0
 # gets time at the start
 start_time = time.time()
 while True:
-
+    clicked = False
+    screen.fill((0, 0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            clicked = True
+            
+    mouse_pos = pygame.mouse.get_pos()
+    mouse_pos_x = mouse_pos[0]
+    mouse_pos_y = mouse_pos[1]
     
-    
-
+    if start_screen_active:
+        screen.blit(start_screen, (0, 0))
+        screen.blit(track1_button, (20, 450))
+        screen.blit(track2_button, (20, 570))
+    if 420 >= mouse_pos_x >= 20 and 470 >= mouse_pos_y >= 450 and clicked and start_screen_active:
+        track1_select = True
+        track2_select = False
+        car_visable = True
+        finish_line_active = True
+        start_screen_active = False
+    elif 420 >= mouse_pos_x >= 20 and 590 >= mouse_pos_y >= 570 and clicked and start_screen_active:
+        track2_select = True
+        car_visable = True
+        finish_line_active = True
+        track1_select = False
+        start_screen_active = False
     lap_time = int(time.time() - start_time) 
+    
+    grass_mask = grass_mask1
+    if track2_select:
+        grass_mask = grass_mask2
+        current_track = track2
+    elif track1_select:
+        grass_mask = grass_mask1
+        current_track = track
+    if not start_screen_active:
+        screen.blit(current_track, (0, 0))
+    
+    
 
     font = pygame.font.SysFont("Arial", 30)
     font2 = pygame.font.SysFont("Arial", 15)
     text = font.render("Lap Time: " + str(lap_time), True, (0, 0, 0))
-    screen.blit(track, (0, 0))
-    screen.blit(text, (1000, 20))
     
-    screen.blit(finish_line, (80, 400))
+    mouse_pos = pygame.mouse.get_pos()
+    
+    
+    screen.blit(text, (1000, 20))
+    if finish_line_active:
+        screen.blit(finish_line, (80, 400))
     
     for i in range(len(lap_time_list)):
         lap_time_text = font2.render("lap:" + str(i + 1) + " " + str(lap_time_list[i]), True, (0, 0, 0))
