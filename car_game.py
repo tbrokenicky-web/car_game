@@ -147,29 +147,37 @@ while True:
         screen.blit(track2_button, (20, 570))
     # this is basicly the hit box for the 1st track button
     if 420 >= mouse_pos_x >= 20 and 470 >= mouse_pos_y >= 450 and clicked and start_screen_active:
+        start_time = time.time()
         track1_select = True
         track2_select = False
         car_visable = True
         finish_line_active = True
         start_screen_active = False
         exit_button_active = True
+        lap_time_list = []
+
     # this is the hit box for the second track button
     elif 420 >= mouse_pos_x >= 20 and 590 >= mouse_pos_y >= 570 and clicked and start_screen_active:
         # all of these change so that the track shows up
+        start_time = time.time()
         track2_select = True
         car_visable = True
         finish_line_active = True
         track1_select = False
         start_screen_active = False
         exit_button_active = True
-    
+        lap_time_list = []
     if 400 >= mouse_pos_x >= 0 and 100 >= mouse_pos_y >= 0 and clicked and track1_select:
+        
         track1_select = False
         track2_select = False
         car_visable = False
         finish_line_active = False
         start_screen_active = True
         exit_button_active = False
+        my_car.x = 125
+        my_car.y = 500
+        my_car.angle = 0
     elif 400 >= mouse_pos_x >= 0 and 100 >= mouse_pos_y >= 0 and clicked and track2_select:
         track2_select = False
         track1_select = False
@@ -177,7 +185,9 @@ while True:
         finish_line_active = False
         start_screen_active = True
         exit_button_active = False
-    
+        my_car.x = 125
+        my_car.y = 500
+        my_car.angle = 0
     lap_time = int(time.time() - start_time) 
     
     grass_mask = grass_mask1
