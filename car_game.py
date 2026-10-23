@@ -47,6 +47,21 @@ grass_mask2 = pygame.mask.from_threshold(track2_collision, (255, 255, 255), (10,
 # if the car is visable
 car_visable = False
 
+try:
+    with open("save_track1.txt", "r") as file:
+        best_lap_time = float(file.read())
+except FileNotFoundError:
+    best_lap_time = 0
+
+
+try:
+    with open("save_track2.txt", "r") as file:
+        best_lap_time_2 = float(file.read())
+except FileNotFoundError:
+    best_lap_time_2 = 0
+
+
+
 #class for the car with all the cariables
 class car:
     
@@ -140,13 +155,21 @@ while True:
     # take the positions out of the list
     mouse_pos_x = mouse_pos[0]
     mouse_pos_y = mouse_pos[1]
+    
+    font2 = pygame.font.SysFont("Arial", 15)
+
+
     # the start screen
     if start_screen_active:
         screen.blit(start_screen, (0, 0))
         screen.blit(track1_button, (20, 450))
         screen.blit(track2_button, (20, 570))
+        high_score_text_1 = font2.render("High Score track 1: " + str(best_lap_time), True, (255, 255, 255))
+        screen.blit(high_score_text_1, (800, 150))
+        high_score_text_2 = font2.render("High Score track 2: " + str(best_lap_time_2), True, (255, 255, 255))
+        screen.blit(high_score_text_2, (800, 450))
     # this is basicly the hit box for the 1st track button
-    if 420 >= mouse_pos_x >= 20 and 470 >= mouse_pos_y >= 450 and clicked and start_screen_active:
+    if 120 >= mouse_pos_x >= 20 and 470 >= mouse_pos_y >= 450 and clicked and start_screen_active:
         start_time = time.time()
         track1_select = True
         track2_select = False
@@ -157,7 +180,7 @@ while True:
         lap_time_list = []
 
     # this is the hit box for the second track button
-    elif 420 >= mouse_pos_x >= 20 and 590 >= mouse_pos_y >= 570 and clicked and start_screen_active:
+    elif 120 >= mouse_pos_x >= 20 and 590 >= mouse_pos_y >= 570 and clicked and start_screen_active:
         # all of these change so that the track shows up
         start_time = time.time()
         track2_select = True
@@ -207,6 +230,9 @@ while True:
     font2 = pygame.font.SysFont("Arial", 15)
     text = font.render("Lap Time: " + str(lap_time), True, (0, 0, 0))
     
+    
+    
+    high_score_text = font2.render("High Score track 1: " + str(best_lap_time), True, (0, 0, 0))
     mouse_pos = pygame.mouse.get_pos()
     
     
@@ -253,6 +279,7 @@ while True:
 
 
         if 180 >= my_car.x >= 80 and 450 >= my_car.y >= 400:
+            
             # if it hasent happend
             if not crossed_line:
                 total_time = time.time() - start_time
@@ -260,9 +287,32 @@ while True:
                 lap_time = total_time - last_lap_time
 
                 lap_time_list.append(round(lap_time, 3))
+                
+                if any(time >= 5 for time in lap_time_list):
+                    if track1_select:
+                        best_lap_time = min(time for time in lap_time_list if time >= 5)
+                
+                
+                if any(time >= 5 for time in lap_time_list) and track2_select:
+                    if track2_select:
+                        best_lap_time_2 = min(time for time in lap_time_list if time >= 5)
+                
+                if lap_time >= 5:
+                    if track1_select:
+                        if best_lap_time == 0 or lap_time < best_lap_time:
+                            best_lap_time = lap_time
+                            with open("save_track1.txt", "w") as file:
+                                file.write(str(best_lap_time))
+
+                    elif track2_select:
+                        if best_lap_time_2 == 0 or lap_time < best_lap_time_2:
+                            best_lap_time_2 = lap_time
+                            with open("save_track2.txt", "w") as file:
+                                file.write(str(best_lap_time_2))
+                    
                 crossed_line = True
                 last_lap_time = total_time
-
+                
         else:
             crossed_line = False
         
