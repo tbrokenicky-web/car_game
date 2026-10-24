@@ -22,23 +22,29 @@ finish_line = pygame.transform.scale(finish_line, (100, 50))
 finish_line_active = False
 
 # start screen and the buttons
-start_screen = pygame.image.load("start_screen.png")
+start_screen = pygame.image.load("start_screen_improved.png")
 start_screen_active = True
-track1_button = pygame.image.load("track_1_button.png")
-track1_button = pygame.transform.scale(track1_button, (100, 20))
-exit_button = pygame.image.load("exit_button.png")
+track1_button = pygame.image.load("buttons/track_1_button_improved.png")
+track1_button = pygame.transform.scale(track1_button, (200, 80))
+track1_button_hover = pygame.image.load("buttons/track_1_button_hover.png")
+track1_button_hover = pygame.transform.scale(track1_button_hover, (200, 80))
+
+exit_button = pygame.image.load("buttons/exit_button.png")
 exit_button = pygame.transform.scale(exit_button, (100, 40))
 exit_button_active = False
-track2_button = pygame.image.load("track_2_button.png")
-track2_button = pygame.transform.scale(track2_button, (100, 20))
+
+track2_button = pygame.image.load("buttons/track_2_button_improved.png")
+track2_button = pygame.transform.scale(track2_button, (200, 80))
+track2_button_hover = pygame.image.load("buttons/track_2_button_hover.png")
+track2_button_hover = pygame.transform.scale(track2_button_hover, (200, 80))
 
 
 
 #tracks and their masks for collison
-track = pygame.image.load("track.png")
+track = pygame.image.load("track_improved.png")
 track1_select = False
 track_collision = pygame.image.load("Better_collision_track.png").convert()
-track2 = pygame.image.load("track2.png")
+track2 = pygame.image.load("track2_improved.png")
 track2_select = False
 track2_collision = pygame.image.load("track2_collision.png").convert()
 grass_mask1 = pygame.mask.from_threshold(track_collision, (255, 255, 255), (10, 10, 10, 255) )
@@ -162,14 +168,23 @@ while True:
     # the start screen
     if start_screen_active:
         screen.blit(start_screen, (0, 0))
-        screen.blit(track1_button, (20, 450))
-        screen.blit(track2_button, (20, 570))
+        if 220 >= mouse_pos_x >= 20 and 530 >= mouse_pos_y >= 450 and start_screen_active:
+            screen.blit(track1_button_hover, (20, 450))
+        else:
+            screen.blit(track1_button, (20, 450))
+        
+        if 220 >= mouse_pos_x >= 20 and 650 >= mouse_pos_y >= 570 and start_screen_active:
+            screen.blit(track2_button_hover, (20, 570))
+        else:
+            screen.blit(track2_button, (20, 570))
+        
         high_score_text_1 = font2.render("High Score track 1: " + str(best_lap_time), True, (255, 255, 255))
         screen.blit(high_score_text_1, (800, 150))
         high_score_text_2 = font2.render("High Score track 2: " + str(best_lap_time_2), True, (255, 255, 255))
         screen.blit(high_score_text_2, (800, 450))
     # this is basicly the hit box for the 1st track button
-    if 120 >= mouse_pos_x >= 20 and 470 >= mouse_pos_y >= 450 and clicked and start_screen_active:
+   
+    if 220 >= mouse_pos_x >= 20 and 530 >= mouse_pos_y >= 450 and clicked and start_screen_active:
         start_time = time.time()
         track1_select = True
         track2_select = False
@@ -178,9 +193,10 @@ while True:
         start_screen_active = False
         exit_button_active = True
         lap_time_list = []
-
+    
+    
     # this is the hit box for the second track button
-    elif 120 >= mouse_pos_x >= 20 and 590 >= mouse_pos_y >= 570 and clicked and start_screen_active:
+    elif 220 >= mouse_pos_x >= 20 and 650 >= mouse_pos_y >= 570 and clicked and start_screen_active:
         # all of these change so that the track shows up
         start_time = time.time()
         track2_select = True
@@ -211,6 +227,7 @@ while True:
         my_car.x = 125
         my_car.y = 500
         my_car.angle = 0
+        lap_time_list = []
     lap_time = int(time.time() - start_time) 
     
     grass_mask = grass_mask1
@@ -232,7 +249,6 @@ while True:
     
     
     
-    high_score_text = font2.render("High Score track 1: " + str(best_lap_time), True, (0, 0, 0))
     mouse_pos = pygame.mouse.get_pos()
     
     
@@ -288,25 +304,18 @@ while True:
 
                 lap_time_list.append(round(lap_time, 3))
                 
-                if any(time >= 5 for time in lap_time_list):
-                    if track1_select:
-                        best_lap_time = min(time for time in lap_time_list if time >= 5)
                 
-                
-                if any(time >= 5 for time in lap_time_list) and track2_select:
-                    if track2_select:
-                        best_lap_time_2 = min(time for time in lap_time_list if time >= 5)
                 
                 if lap_time >= 5:
                     if track1_select:
-                        if best_lap_time == 0 or lap_time < best_lap_time:
-                            best_lap_time = lap_time
+                        if lap_time < best_lap_time:
+                            best_lap_time = round(lap_time, 3)
                             with open("save_track1.txt", "w") as file:
                                 file.write(str(best_lap_time))
 
                     elif track2_select:
-                        if best_lap_time_2 == 0 or lap_time < best_lap_time_2:
-                            best_lap_time_2 = lap_time
+                        if lap_time < best_lap_time_2:
+                            best_lap_time_2 = round(lap_time, 3)
                             with open("save_track2.txt", "w") as file:
                                 file.write(str(best_lap_time_2))
                     
