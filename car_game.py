@@ -11,11 +11,34 @@ screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption("Car Game")
 
 #car image and it collison mask image
-car_image = pygame.image.load("car_no_bg.png")
-car_image = pygame.transform.scale(car_image, (25, 50))
+
+car_red = pygame.image.load("carcolors/car_no_bg.png")
+car_red = pygame.transform.scale(car_red, (25, 50))
 car_collision = pygame.image.load("car_collision.png")
 car_collision = pygame.transform.scale(car_collision, (20,45))
-
+car_blue = pygame.image.load("carcolors/car_blue_no_bg.png")
+car_blue = pygame.transform.scale(car_blue, (25, 50))
+car_green = pygame.image.load("carcolors/car_green_no_bg.png")
+car_green = pygame.transform.scale(car_green, (25, 50))
+car_yellow = pygame.image.load("carcolors/car_yellow_no_bg.png")
+car_yellow = pygame.transform.scale(car_yellow, (25, 50))
+car_red_hover = pygame.image.load("carcolors/swatch_red_hover.png")
+car_red_hover = pygame.transform.scale(car_red_hover, (80, 80))
+car_blue_hover = pygame.image.load("carcolors/swatch_blue_hover.png")
+car_blue_hover = pygame.transform.scale(car_blue_hover, (80, 80))
+car_green_hover = pygame.image.load("carcolors/swatch_green_hover.png")
+car_green_hover = pygame.transform.scale(car_green_hover, (80, 80))
+car_yellow_hover = pygame.image.load("carcolors/swatch_yellow_hover.png")
+car_yellow_hover = pygame. transform.scale(car_yellow_hover, (80, 80))
+car_red_button = pygame.image.load("carcolors/swatch_red.png")
+car_red_button = pygame.transform.scale(car_red_button, (80, 80))
+car_blue_button = pygame.image.load("carcolors/swatch_blue.png")
+car_blue_button = pygame.transform.scale(car_blue_button, (80, 80))
+car_green_button = pygame.image.load("carcolors/swatch_green.png")
+car_grenn_button = pygame.transform.scale(car_green_button, (80, 80))
+car_yellow_button = pygame.image.load("carcolors/swatch_yellow.png")
+car_yellow_button = pygame.transform.scale(car_yellow_button, (80, 80))
+car_image = car_red
 # finish line and if the line is on screen
 finish_line = pygame.image.load("finish_line_no_bg.png")
 finish_line = pygame.transform.scale(finish_line, (100, 50))
@@ -24,10 +47,21 @@ finish_line_active = False
 # start screen and the buttons
 start_screen = pygame.image.load("start_screen_improved.png")
 start_screen_active = True
+settings_screen = pygame.image.load("settings_screen_with_back.png")
+settings_screen_active = False
+
 track1_button = pygame.image.load("buttons/track_1_button_improved.png")
 track1_button = pygame.transform.scale(track1_button, (200, 80))
 track1_button_hover = pygame.image.load("buttons/track_1_button_hover.png")
 track1_button_hover = pygame.transform.scale(track1_button_hover, (200, 80))
+settings_button = pygame.image.load("buttons/settings_button.png")
+settings_button = pygame.transform.scale(settings_button, (200, 80))
+settings_button_hover = pygame.image.load("buttons/settings_button_hover.png")
+settings_button_hover = pygame.transform.scale(settings_button_hover, (200, 80))
+reset_button = pygame.image.load("buttons/reset_button.png")
+reset_button = pygame.transform.scale(reset_button, (190, 60))
+reset_button_hover = pygame.image.load("buttons/reset_button_hover.png")
+reset_button_hover = pygame.transform.scale(reset_button_hover, (190, 60))
 
 exit_button = pygame.image.load("buttons/exit_button.png")
 exit_button = pygame.transform.scale(exit_button, (100, 40))
@@ -37,6 +71,16 @@ track2_button = pygame.image.load("buttons/track_2_button_improved.png")
 track2_button = pygame.transform.scale(track2_button, (200, 80))
 track2_button_hover = pygame.image.load("buttons/track_2_button_hover.png")
 track2_button_hover = pygame.transform.scale(track2_button_hover, (200, 80))
+
+car_red_pv = pygame.image.load("carcolors/car_no_bg.png")
+car_red_pv = pygame.transform.scale(car_red_pv, (80, 135))
+car_blue_pv = pygame.image.load("carcolors/car_blue_no_bg.png")
+car_blue_pv = pygame.transform.scale(car_blue_pv, (80, 135))
+car_green_pv = pygame.image.load("carcolors/car_green_no_bg.png")
+car_green_pv = pygame.transform.scale(car_green_pv, (80, 135))
+car_yellow_pv = pygame.image.load("carcolors/car_yellow_no_bg.png")
+car_yellow_pv = pygame.transform.scale(car_yellow_pv, (80, 135))
+preview_car_color = car_red_pv
 
 
 
@@ -114,11 +158,11 @@ class car:
     
     # turn the angle of the far right
     def move_right(self):
-        self.angle -= 4
+        self.angle -= 3.75
         
     #turns the angle of the car left
     def move_left(self):
-        self.angle += 4
+        self.angle += 3.75
     
 
 # creates a car from the class
@@ -164,6 +208,8 @@ while True:
     
     font2 = pygame.font.SysFont("Arial", 15)
 
+    
+
 
     # the start screen
     if start_screen_active:
@@ -178,12 +224,102 @@ while True:
         else:
             screen.blit(track2_button, (20, 570))
         
+        
+        
+        if 220 >= mouse_pos_x >= 20 and 120 >= mouse_pos_y >= 30 and start_screen_active:
+            screen.blit(settings_button_hover, (20, 30))
+
+            if clicked:
+                settings_screen_active = True
+                start_screen_active = False
+                clicked = False
+        else:
+            screen.blit(settings_button, (20, 30))
+            
         high_score_text_1 = font2.render("High Score track 1: " + str(best_lap_time), True, (255, 255, 255))
         screen.blit(high_score_text_1, (800, 150))
         high_score_text_2 = font2.render("High Score track 2: " + str(best_lap_time_2), True, (255, 255, 255))
         screen.blit(high_score_text_2, (800, 450))
-    # this is basicly the hit box for the 1st track button
-   
+    
+    reset_track1_text = font2.render(str(best_lap_time), True, (255, 255, 255))
+
+    reset_track2_text = font2.render(str(best_lap_time_2), True, (255, 255, 255))
+    
+    if settings_screen_active:
+        
+        screen.blit(settings_screen, (0, 0))
+        screen.blit(preview_car_color, (350, 215))
+        screen.blit(reset_track1_text, (516, 480))
+        screen.blit(reset_track2_text, (516, 562))
+        if 620 >= mouse_pos_x >= 540 and 319 >= mouse_pos_y >= 239 and settings_screen_active:
+            screen.blit(car_red_hover, (540, 239))
+        else: 
+            screen.blit(car_red_button, (540, 239))
+        
+        if 720 >= mouse_pos_x >= 640 and 319 >= mouse_pos_y >= 239 and settings_screen_active:
+            screen.blit(car_blue_hover, (640, 239))
+        else:
+            screen.blit(car_blue_button, (640, 239))
+        
+        if 820 >= mouse_pos_x >= 740 and 319 >= mouse_pos_y >= 239 and settings_screen_active:
+            screen.blit(car_green_hover, (740, 239))
+        else:
+            screen.blit(car_green_button, (740, 239))
+        
+        if 920 >= mouse_pos_x >= 840 and 319 >= mouse_pos_y >= 239 and settings_screen_active:
+            screen.blit(car_yellow_hover, (840, 239))
+        else:
+            screen.blit(car_yellow_button, (840, 239))
+        # track 1 reset over button
+        if 940 >= mouse_pos_x >= 750 and 524 >= mouse_pos_y >= 464 and settings_screen_active:
+            screen.blit(reset_button_hover, (750, 464))
+        else:
+            screen.blit(reset_button, (750, 464))
+        
+        if 940 >= mouse_pos_x >= 750 and 606 >= mouse_pos_y >= 546 and settings_screen_active:
+            screen.blit(reset_button_hover, (750, 546))
+        else:
+            screen.blit(reset_button, (750, 546))
+
+
+        
+
+        # back button
+        if 220 >= mouse_pos_x >= 20 and 110 >= mouse_pos_y >= 30 and clicked and settings_screen_active:
+            
+            settings_screen_active = False
+            start_screen_active = True
+        # red car selection
+        elif 620 >= mouse_pos_x >= 540 and 319 >= mouse_pos_y >= 239 and clicked and settings_screen_active:
+            car_image = car_image
+            preview_car_color = car_red_pv
+            
+        # blue car
+        elif 720 >= mouse_pos_x >= 640 and 319 >= mouse_pos_y >= 239 and clicked and settings_screen_active:
+            car_image = car_blue
+            preview_car_color = car_blue_pv
+        # green car
+        elif 820 >= mouse_pos_x >= 740 and 319 >= mouse_pos_y >= 239 and clicked and settings_screen_active:
+            car_image = car_green
+            preview_car_color = car_green_pv
+        # yellow car
+        elif 920 >= mouse_pos_x >= 840 and 319 >= mouse_pos_y >= 239 and clicked and settings_screen_active:
+            car_image = car_yellow
+            preview_car_color = car_yellow_pv
+        # reset 1 hover
+        
+        # reset button track 1
+        elif 940 >= mouse_pos_x >= 750 and 524 >= mouse_pos_y >= 464 and clicked and settings_screen_active:
+            best_lap_time = 0
+            with open("save_track1.txt", "w") as file:
+                file.write(str(best_lap_time))
+        # reset button track 2
+        elif 940 >= mouse_pos_x >= 750 and 606 >= mouse_pos_y >= 546 and clicked and settings_screen_active:
+            best_lap_time_2 = 0
+            with open("save_track2.txt", "w") as file:
+                file.write(str(best_lap_time_2))
+
+
     if 220 >= mouse_pos_x >= 20 and 530 >= mouse_pos_y >= 450 and clicked and start_screen_active:
         start_time = time.time()
         track1_select = True
@@ -237,7 +373,7 @@ while True:
     elif track1_select:
         grass_mask = grass_mask1
         current_track = track
-    if not start_screen_active:
+    if not start_screen_active and not settings_screen_active:
         screen.blit(current_track, (0, 0))
     
     if exit_button_active:
@@ -308,13 +444,13 @@ while True:
                 
                 if lap_time >= 5:
                     if track1_select:
-                        if lap_time < best_lap_time:
+                        if best_lap_time == 0 or lap_time < best_lap_time:
                             best_lap_time = round(lap_time, 3)
                             with open("save_track1.txt", "w") as file:
                                 file.write(str(best_lap_time))
 
                     elif track2_select:
-                        if lap_time < best_lap_time_2:
+                        if best_lap_time_2 == 0 or lap_time < best_lap_time_2:
                             best_lap_time_2 = round(lap_time, 3)
                             with open("save_track2.txt", "w") as file:
                                 file.write(str(best_lap_time_2))
@@ -334,6 +470,7 @@ while True:
         
           
         screen.blit(rotate_car, car_rect)
+
 
     pygame.display.flip()
 
