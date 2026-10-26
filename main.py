@@ -163,8 +163,16 @@ class car:
     #turns the angle of the car left
     def move_left(self):
         self.angle += 3.75
-    
+max_sensor_distance = 200
+sensor_angle = [-math.pi/3, -math.pi/6, 0.0 , math.pi/6, math.pi/3]  
+sensor_step = 5
 
+def point_to_segement_distance(px, py, ax, ay, bx, by):
+    # gets the distanc efrom the point to the ax
+    vx, vy = px - ax, py - ay
+    # gets the distance from the point to bx and by
+    ux, uy = px = bx, py - by
+    
 # creates a car from the class
 my_car = car()
 
@@ -185,6 +193,8 @@ lap_time = 0
 # gets time at the start
 start_time = time.time()
 
+
+
 # this is the game loop
 while True:
     clicked = False
@@ -198,7 +208,7 @@ while True:
         # so that if the mouse is put don it changes the clicked to true
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             clicked = True
-    
+
     # gets the position of your mouse      
     mouse_pos = pygame.mouse.get_pos()
    
